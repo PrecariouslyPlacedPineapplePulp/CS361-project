@@ -26,7 +26,7 @@ body {
     font-family: "Roboto", sans-serif;
 }
 
-h1#customize-title {
+.main-title {
     color: var(--text-color-on-back);
 }
 
@@ -51,6 +51,12 @@ div.side-panel-contents {
     align-items: center;
 }
 
+div.about-contents {
+    margin: 15px 0px;
+    padding: 10px 0px;
+    border-top: 1px solid var(--text-color-on-white);
+}
+
 main {
     display: flex;
 }
@@ -73,7 +79,7 @@ div.main-panel {
     border: 2px solid var(--background-color-2);
     border-radius: 20px;
     height: 35%;
-    width: 60%;
+    width: 70%;
     margin: 10px;
     color: var(--text-color-on-white);
     background-color: var(--background-color-general)
@@ -90,7 +96,7 @@ div.statistics-filter-container {
 }
 
 div.statistics-checklist-container {
-    width: 100%;
+    width: 93%;
     overflow: auto;
 }
 
@@ -106,7 +112,7 @@ fieldset#statistics-checklist {
 /* for the inputs and theme box */
 
 div.file-input-container {
-    margin: 10px 2px 2px 2px;
+    margin: 5px 2px 5px 2px;
 }
 
 div.color-theme-icon-container {
@@ -118,16 +124,44 @@ span#palette-icon {
     font-weight: lighter;
 }
 
-fieldset#color-theme-checklist {
-    border-style: none;
+input#color-picker {
+    border: none;
+    background-color: rgb(0 0 0 / 0%);
+    height: 30px;
+    width: 30px;
+}
+
+.file-input-subtitle {
+    margin: 5px;
+}
+
+.file-input-container {
+    width: 90%;
+}
+
+#type-picker-container {
+    padding: 6px;
+    border-top: 1px solid var(--text-color-on-white);
+    border-bottom: 1px solid var(--text-color-on-white);
 }
 
 /* for the results box */
 
-h1#results-title {
-    color: var(--text-color);
-}
-
 .hidden {
     display: none;
+}
+
+
+
+/* for the BUTTON */
+
+button#apply-button {
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.25);
+    width: 100px;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 0);
+    border: 3px solid white;
+    border-radius: 15px;
+    color: var(--text-color-on-back);
+    font-size: 1.2em;
 }
