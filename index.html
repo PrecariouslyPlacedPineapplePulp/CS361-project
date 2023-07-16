@@ -3,24 +3,17 @@
     <head>
         <meta charset="utf-8">
         <title>Myopine</title>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
         <script src="index.js" charset="utf-8" defer></script>
     </head>
     <body>
 
-        <header class="top-ribbon">
-            <div class="header-image-container">
-                <img src="sample.jpg" alt="header image">
-            </div>
-            <h1 class="site-title">Myopine</h1>
-        </header>
-
         <main>
-            <header class="side-panel">
+            <header class="side-panel" id="about-panel">
                 <div class="side-panel-contents">
-                    <h1 class="side-title">Previous Uploads</h1>
-                    <div class="prev-file-container">sample.csv</div>
+                    <h1 class="side-title">About</h1>
                 </div>
             </header>
 
@@ -28,33 +21,70 @@
                 <h1 id="customize-title">Customize Your Output</h1>
                 <h1 id="results-title" class="hidden">Results</h1>
                 <div class="child-panel" id="statistics-box-container">
-                    <div class="statistics-icon-container">
-                        <span class="material-symbols-outlined hidden" id="query-stats-icon">
-                            query_stats
-                        </span>
+                    <div class="statistics-filter-container">
+                        <label for="statistics-filter" class="statistics-filter-label">
+                            Select Statistics
+                        </label>
+                        <select id="statistics-filter" name="statistics-filter">
+                            <option id="all-option">All</option>
+                            <option id="nd-option">Normal Distribution</option>
+                            <option id="ht-option">Hypothesis Testing</option>
+                            <option id="ct-option">Color Themes</option>
+                        </select>
                     </div>
                     <div class="statistics-checklist-container">
                         <fieldset id="statistics-checklist">
                             <div>
-                                <input type="checkbox" name="std-dev" id="checkbox-std-dev">
-                                <label for="checkbox-std-dev">Standard Deviation</label>
+                                <input type="checkbox" name="std-dev" id="checkbox-std-dev" class="nd-option">
+                                <label for="checkbox-std-dev" class="nd-option-label">Standard Deviation</label>
                             </div>
                             <div>
-                                <input type="checkbox" name="std-dev" id="checkbox-std-dev">
-                                <label for="checkbox-std-dev">Standard Deviation</label>
+                                <input type="checkbox" name="variation" id="checkbox-var" class="nd-option">
+                                <label for="checkbox-var" class="nd-option-label">Variation</label>
                             </div>
                             <div>
-                                <input type="checkbox" name="std-dev" id="checkbox-std-dev">
-                                <label for="checkbox-std-dev">Standard Deviation</label>
+                                <input type="checkbox" name="mean" id="checkbox-mean" class="generic-option">
+                                <label for="checkbox-mean" class="generic-option-label">Mean</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="median" id="checkbox-median" class="generic-option">
+                                <label for="checkbox-median" class="generic-option-label">Median</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="hp-t-statistic" id="checkbox-hp-t" class="hp-option">
+                                <label for="checkbox-hp-t" class="hp-option-label">t-test for a hypothesis test</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="hp-p-value" id="checkbox-hp-v" class="hp-option">
+                                <label for="checkbox-hp-v" class="hp-option-label">p-value for a hypothesis test</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="hp-z-statistic" id="checkbox-hp-z" class="hp-option">
+                                <label for="checkbox-hp-z" class="hp-option-label">z-test for a hypothesis test</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="hp-c-interval" id="checkbox-c-interval" class="hp-option">
+                                <label for="checkbox-hp-z" class="hp-option-label">confidence interval for a hypothesis test</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="temp" id="temp" class="temp">
+                                <label for="temp" class="temp">temp</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="temp" id="temp" class="temp">
+                                <label for="temp" class="temp">temp</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="temp" id="temp" class="temp">
+                                <label for="temp" class="temp">temp</label>
                             </div>
                         </fieldset>
                     </div>
                 </div>
-                <div class="child-panel" id="color-theme-box-container">
-                    <div class="color-theme-icon-container">
-                        <span class="material-symbols-outlined hidden" id="palette-icon">
-                            palette
-                        </span>
+                <div class="child-panel" id="file-box-container">
+                    <div class="file-input-container">
+                        <label for="file-input">File: </label>
+                        <input type="file" id="file-input" name="file-input">
                     </div>
                     <fieldset id="color-theme-checklist">
                         <div>
@@ -82,6 +112,13 @@
                     <button id="apply-button">Apply</button>
                 </div>
             </div> <!-- main panel -->
+
+            <header class="side-panel" id="history-panel">
+                <div class="side-panel-contents">
+                    <h1 class="side-title">Previous Uploads</h1>
+                    <div class="prev-file-container">sample.csv</div>
+                </div>
+            </header>
         </main>
         <button type="button" id="add-new-file">
             <i class="fas fa-plus"></i>
@@ -103,5 +140,5 @@ https://fonts.google.com/
 https://www.w3schools.com/html/default.asp
 https://www.w3schools.com/cssref/index.php
 
-L 5, 7
+L 5 (random variables), 7 (normal distribution), 11 (hypo testing)
 -->

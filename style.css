@@ -1,43 +1,33 @@
-/* :root {
-    --background-color-general: purple;
-    --background-color-2: rgb(149, 0, 149);
-    --foreground-color: white;
-    --text-color: white;
-} */
-
 :root {
+    --background-color-general: rgb(255, 255, 255);
+    --background-color-2: rgb(255, 255, 255);
+    --foreground-color: white;
+    --text-color-on-white: rgb(103, 103, 103);
+    --text-color-on-back: white;
+}
+
+/* :root {
     --background-color-general: rgb(255, 255, 255);
     --background-color-2: rgb(200, 200, 200);
     --background-color-top-ribbon: rgb(72, 72, 72);
     --foreground-color: rgb(90, 90, 90);
-    --text-color: rgb(90, 90, 90);
-    --text-color-2: white;
+    --text-color-on-white: rgb(90, 90, 90);
+    --text-color-on-back: white;
+} */
+
+html, body {
+    min-height: 100%;
 }
 
 body {
-    background-color: var(--background-color-general);
+    /* background-color: rgb(177, 225, 255); */
+    background-image: linear-gradient(to bottom right, rgb(204, 0, 255), rgb(72, 0, 255));
     margin: 0px;
+    font-family: "Roboto", sans-serif;
 }
 
-header.top-ribbon {
-    /* background-color: #d8dee1; */
-    /* background-color: var(--background-color); */
-    background-color: var(--background-color-top-ribbon);
-    color: var(--text-color-2);
-    display: flex;
-    align-items: center;
-    position: relative;
-    border-radius: 3px;
-    min-height: 60px;
-    max-height: 60px;
-}
-
-div.header-image-container {
-    height: 80%;
-}
-
-h1.site-title {
-    height: 60%;
+h1#customize-title {
+    color: var(--text-color-on-back);
 }
 
 header.side-panel {
@@ -51,11 +41,11 @@ header.side-panel {
     /* background-color: #f0f6f9; */
     background-color: var(--background-color-2);
     border-radius: 20px;
-    margin: 10px 10px 10px 20px;
+    margin: 50px 30px 30px 30px;
 }
 
 div.side-panel-contents {
-    color: var(--text-color);
+    color: var(--text-color-on-white);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -79,17 +69,29 @@ div.main-panel {
 .child-panel {
     display: flex;
     flex-direction: column;
+    align-items: center;
     border: 2px solid var(--background-color-2);
     border-radius: 20px;
     height: 35%;
-    width: 70%;
+    width: 60%;
     margin: 10px;
+    color: var(--text-color-on-white);
+    background-color: var(--background-color-general)
 }
 
 /* for the stats box */
 
 div.statistics-icon-container {
     border-right: 2px solid var(--background-color-2);
+}
+
+div.statistics-filter-container {
+    margin: 10px 2px 2px 2px;
+}
+
+div.statistics-checklist-container {
+    width: 100%;
+    overflow: auto;
 }
 
 span#query-stats-icon {
@@ -101,7 +103,11 @@ fieldset#statistics-checklist {
     border-style: none;
 }
 
-/* for the color theme box */
+/* for the inputs and theme box */
+
+div.file-input-container {
+    margin: 10px 2px 2px 2px;
+}
 
 div.color-theme-icon-container {
     border-right: 2px solid var(--background-color-2);
@@ -117,10 +123,6 @@ fieldset#color-theme-checklist {
 }
 
 /* for the results box */
-
-h1#customize-title {
-    color: var(--text-color);
-}
 
 h1#results-title {
     color: var(--text-color);
