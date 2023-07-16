@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Myopine</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        <script src="index.js" charset="utf-8" defer></script>
+    </head>
+    <body>
+
+        <header class="top-ribbon">
+            <div class="header-image-container">
+                <img src="sample.jpg" alt="header image">
+            </div>
+            <h1 class="site-title">Myopine</h1>
+        </header>
+
+        <main>
+            <header class="side-panel">
+                <div class="side-panel-contents">
+                    <h1 class="side-title">Previous Uploads</h1>
+                    <div class="prev-file-container">sample.csv</div>
+                </div>
+            </header>
+
+            <div class="main-panel">
+                <h1 id="customize-title">Customize Your Output</h1>
+                <h1 id="results-title" class="hidden">Results</h1>
+                <div class="child-panel" id="statistics-box-container">
+                    <div class="statistics-icon-container">
+                        <span class="material-symbols-outlined hidden" id="query-stats-icon">
+                            query_stats
+                        </span>
+                    </div>
+                    <div class="statistics-checklist-container">
+                        <fieldset id="statistics-checklist">
+                            <div>
+                                <input type="checkbox" name="std-dev" id="checkbox-std-dev">
+                                <label for="checkbox-std-dev">Standard Deviation</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="std-dev" id="checkbox-std-dev">
+                                <label for="checkbox-std-dev">Standard Deviation</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="std-dev" id="checkbox-std-dev">
+                                <label for="checkbox-std-dev">Standard Deviation</label>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="child-panel" id="color-theme-box-container">
+                    <div class="color-theme-icon-container">
+                        <span class="material-symbols-outlined hidden" id="palette-icon">
+                            palette
+                        </span>
+                    </div>
+                    <fieldset id="color-theme-checklist">
+                        <div>
+                            <input type="checkbox" name="color1" id="checkbox-color1">
+                            <label for="checkbox-color1">Color 1</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" name="color2" id="checkbox-color2">
+                            <label for="checkbox-color2">Color 2</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" name="color3" id="checkbox-color3">
+                            <label for="checkbox-color3">Color 3</label>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="child-panel hidden" id="results-box-container">
+                    <div class="color-theme-icon-container">
+                        <span class="material-symbols-outlined hidden" id="bar-chart-icon">
+                            bar_chart
+                        </span>
+                    </div>
+                </div> <!-- results box -->
+                <div id="apply-button-container">
+                    <button id="apply-button">Apply</button>
+                </div>
+            </div> <!-- main panel -->
+        </main>
+        <button type="button" id="add-new-file">
+            <i class="fas fa-plus"></i>
+        </button>
+        <!-- use map and area tags for the charts -->
+    </body>
+</html>
+
+<!-- LINKS 
+https://fontawesome.com/kits/8663691d11/setup?welcome=yes
+https://github.com/osu-cs290-f22/assignment-5-PrecariouslyPlacedPineapplePulp
+https://stackoverflow.com/questions/36856232/write-add-data-in-json-file-using-node-js
+https://stackoverflow.com/questions/16507222/create-json-object-dynamically-via-javascript-without-concate-strings
+
+General ones:
+https://www.w3schools.com/css/default.asp
+https://developer.mozilla.org/en-US/docs/Web/CSS
+https://fonts.google.com/
+https://www.w3schools.com/html/default.asp
+https://www.w3schools.com/cssref/index.php
+
+L 5, 7
+-->
