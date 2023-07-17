@@ -41,35 +41,63 @@
             <div class="main-panel">
                 <h1 class="main-title" id="customize-title">Customize Your Output</h1>
                 <h1 class="main-title hidden" id="results-title" class="hidden">Here are your Results</h1>
+                <div class="child-panel" id="file-box-container">
+                    <div class="file-input-container">
+                        <p class="file-input-subtitle">Choose a file:</p>
+                        <label for="file-input">File: </label>
+                        <input type="file" id="file-input" name="file-input" accept=".csv .xlsx .txt">
+                    </div>
+                    <div class="file-input-container" id="type-picker-container">
+                        <p class="file-input-subtitle">Type of data:</p>
+                        <input type="radio" id="radio-button-1var" name="type-picker" value="norm-dist">
+                        <label for="radio-button-1var">Normal Distribution</label>
+                        <input type="radio" id="radio-button-2var" name="type-picker" value="xy-graph">
+                        <label for="radio-button-2var">X versus Y</label>
+                        <input type="radio" id="radio-button-el" name="type-picker" value="edge-list">
+                        <label for="radio-button-el">Edge list</label>
+                    </div>
+                    <div class="file-input-container" id="color-picker-container">
+                        <p class="file-input-subtitle">Color theme:</p>
+                        <label for="color-picker">Pick a color: </label>
+                        <input type="color" id="color-picker" name="color-picker">
+                    </div>
+                </div>
                 <div class="child-panel" id="statistics-box-container">
                     <div class="statistics-filter-container">
                         <label for="statistics-filter" class="statistics-filter-label">
                             Select Statistics
                         </label>
                         <select id="statistics-filter" name="statistics-filter">
-                            <option id="all-option">All</option>
-                            <option id="nd-option">Normal Distribution</option>
-                            <option id="ht-option">Hypothesis Testing</option>
-                            <option id="ct-option">Color Themes</option>
+                            <option id="select-option-all">All</option>
+                            <option id="select-option-nd">Normal Distribution</option>
+                            <option id="select-option-ht">Hypothesis Testing</option>
+                            <!-- <option id="select-option-xy">Averages</option> -->
+                            <option id="select-option-graph">Graph Measures</option>
                         </select>
                     </div>
+
+                    <!-- This is the statistics checkbox on the bottom middle panel -->
                     <div class="statistics-checklist-container">
                         <fieldset id="statistics-checklist">
                             <div>
                                 <input type="checkbox" name="std-dev" id="checkbox-std-dev" class="nd-option">
-                                <label for="checkbox-std-dev" class="nd-option-label">Standard Deviation</label>
+                                <label for="checkbox-std-dev" class="nd-option-label">standard deviation</label>
                             </div>
                             <div>
                                 <input type="checkbox" name="variation" id="checkbox-var" class="nd-option">
-                                <label for="checkbox-var" class="nd-option-label">Variation</label>
+                                <label for="checkbox-var" class="nd-option-label">variation</label>
                             </div>
                             <div>
-                                <input type="checkbox" name="mean" id="checkbox-mean" class="generic-option">
-                                <label for="checkbox-mean" class="generic-option-label">Mean</label>
+                                <input type="checkbox" name="mean" id="checkbox-mean" class="xy-option nd-option">
+                                <label for="checkbox-mean" class="xy-option-label nd-option-label">mean</label>
                             </div>
                             <div>
-                                <input type="checkbox" name="median" id="checkbox-median" class="generic-option">
-                                <label for="checkbox-median" class="generic-option-label">Median</label>
+                                <input type="checkbox" name="median" id="checkbox-median" class="xy-option nd-option">
+                                <label for="checkbox-median" class="xy-option-label nd-option-label">median</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="best-line" id="checkbox-best-line" class="xy-option">
+                                <label for="checkbox-best-line" class="xy-option-label">line of best fit</label>
                             </div>
                             <div>
                                 <input type="checkbox" name="hp-t-statistic" id="checkbox-hp-t" class="hp-option">
@@ -88,53 +116,39 @@
                                 <label for="checkbox-hp-z" class="hp-option-label">confidence interval for a hypothesis test</label>
                             </div>
                             <div>
-                                <input type="checkbox" name="temp" id="temp" class="temp">
-                                <label for="temp" class="temp">temp</label>
+                                <input type="checkbox" name="graph-v" id="checkbox-graph-v" class="graph-option">
+                                <label for="checkbox-graph-v" class="graph-option-label">number of vectors</label>
                             </div>
                             <div>
-                                <input type="checkbox" name="temp" id="temp" class="temp">
-                                <label for="temp" class="temp">temp</label>
+                                <input type="checkbox" name="graph-e" id="checkbox-graph-e" class="graph-option">
+                                <label for="checkbox-graph-e" class="graph-option-label">number of edges</label>
                             </div>
                             <div>
-                                <input type="checkbox" name="temp" id="temp" class="temp">
-                                <label for="temp" class="temp">temp</label>
+                                <input type="checkbox" name="graph-v-c" id="checkbox-graph-v-c" class="graph-option">
+                                <label for="checkbox-graph-v-c" class="graph-option-label">vertex connectivity</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="graph-e-c" id="checkbox-graph-e-c" class="graph-option">
+                                <label for="checkbox-graph-e-c" class="graph-option-label">edge connectivity</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="graph-d" id="checkbox-graph-d" class="graph-option">
+                                <label for="checkbox-graph-d" class="graph-option-label">graph density</label>
                             </div>
                         </fieldset>
-                    </div>
-                </div>
-                <div class="child-panel" id="file-box-container">
-                    <div class="file-input-container">
-                        <p class="file-input-subtitle">Choose a file:</p>
-                        <label for="file-input">File: </label>
-                        <input type="file" id="file-input" name="file-input">
-                    </div>
-                    <div class="file-input-container" id="type-picker-container">
-                        <p class="file-input-subtitle">Type of data:</p>
-                        <input type="radio" id="radio-button-1var" name="type-picker" value="one-ivar">
-                        <label for="radio-button-1var">One population</label>
-                        <input type="radio" id="radio-button-2var" name="type-picker" value="two-ivar">
-                        <label for="radio-button-2var">Two populations</label>
-                        <input type="radio" id="radio-button-el" name="type-picker" value="edge-list">
-                        <label for="radio-button-el">Edge list</label>
-                    </div>
-                    <div class="file-input-container" id="color-picker-container">
-                        <p class="file-input-subtitle">Color theme:</p>
-                        <label for="color-picker">Pick a color: </label>
-                        <input type="color" id="color-picker" name="color-picker">
                     </div>
                 </div>
                 <div class="child-panel hidden" id="results-box-container">
                     <div id="chart_div"></div>
                 </div> <!-- results box -->
-                <div id="apply-button-container">
-                    <button id="apply-button">Apply</button>
+                <div id="button-container">
+                    <button class="main-buttons" id="apply-button">Apply</button>
                 </div>
             </div> <!-- main panel -->
 
             <header class="side-panel" id="history-panel">
-                <div class="side-panel-contents">
+                <div class="side-panel-contents" id="history-panel-contents">
                     <h1 class="side-title" id="history-title">Previous Uploads</h1>
-                    <div class="prev-file-container">sample.csv</div>
                 </div>
             </header>
         </main>
@@ -156,4 +170,7 @@ https://www.w3schools.com/html/default.asp
 https://www.w3schools.com/cssref/index.php
 
 L 5 (random variables), 7 (normal distribution), 11 (hypo testing)
+
+For graphs:
+https://reference.wolfram.com/language/guide/GraphPropertiesAndMeasurements.html
 -->
