@@ -167,7 +167,11 @@ function toggleResults(event) {
     document.getElementById("results-box-container").classList.toggle("hidden")
     document.getElementById("customize-title").classList.toggle("hidden")
     document.getElementById("results-title").classList.toggle("hidden")
-    document.getElementById("apply-button").innerHTML = "Return"    
+    if (document.getElementById("apply-button").innerHTML === "Return" ) {
+        document.getElementById("apply-button").innerHTML = "Apply" 
+    } else {
+        document.getElementById("apply-button").innerHTML = "Return" 
+    }
 }
 
 function handleApplyButton(event) {
