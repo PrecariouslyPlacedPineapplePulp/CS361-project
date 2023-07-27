@@ -33,10 +33,10 @@
             </div>
             <div class="file-input-container" id="type-picker-container">
                 <p class="file-input-subtitle">Type of data:</p>
-                <input type="radio" id="radio-button-1var" name="type-picker" value="norm-dist">
-                <label for="radio-button-1var">Normal Distribution</label>
-                    <input type="radio" id="radio-button-2var" name="type-picker" value="xy-graph">
-                    <label for="radio-button-2var">X versus Y</label>
+                <input type="radio" id="radio-button-1" name="type-picker" value="norm-dist">
+                <label for="radio-button-1">Normal Distribution</label>
+                    <input type="radio" id="radio-button-2" name="type-picker" value="xy-graph">
+                    <label for="radio-button-2">Linear</label>
                     <input type="radio" id="radio-button-el" name="type-picker" value="edge-list">
                     <label for="radio-button-el">Edge list</label>
                 </div>
@@ -54,8 +54,8 @@
                     <select id="statistics-filter" name="statistics-filter">
                         <option id="select-option-all">All</option>
                         <option id="select-option-nd">Normal Distribution</option>
-                        <option id="select-option-ht">Hypothesis Testing</option>
-                        <!-- <option id="select-option-xy">Averages</option> -->
+                        {{!-- <option id="select-option-ht">Hypothesis Testing</option> --}}
+                        <option id="select-option-xy">Linear</option>
                         <option id="select-option-graph">Graph Measures</option>
                     </select>
                 </div>
@@ -65,59 +65,59 @@
                 <fieldset id="statistics-checklist">
                     <div>
                         <input type="checkbox" name="stats-checkbox" id="checkbox-std-dev" class="nd-option" value="std-dev">
-                        <label for="checkbox-std-dev" class="nd-option-label">standard deviation</label>
+                        <label for="checkbox-std-dev" class="nd-option">standard deviation</label>
                     </div>
                     <div>
                         <input type="checkbox" name="stats-checkbox" id="checkbox-var" class="nd-option" value="variation">
-                        <label for="checkbox-var" class="nd-option-label">variation</label>
+                        <label for="checkbox-var" class="nd-option">variation</label>
                     </div>
                     <div>
                         <input type="checkbox" name="stats-checkbox" id="checkbox-mean" class="xy-option nd-option" value="mean">
-                        <label for="checkbox-mean" class="xy-option-label nd-option-label">mean</label>
+                        <label for="checkbox-mean" class="xy-option nd-option">mean</label>
                     </div>
                     <div>
                         <input type="checkbox" name="stats-checkbox" id="checkbox-median" class="xy-option nd-option" value="median">
-                        <label for="checkbox-median" class="xy-option-label nd-option-label">median</label>
+                        <label for="checkbox-median" class="xy-option nd-option">median</label>
                     </div>
                     <div>
                         <input type="checkbox" name="stats-checkbox" id="checkbox-best-line" class="xy-option" value="line-best-fit">
-                        <label for="checkbox-best-line" class="xy-option-label">line of best fit</label>
+                        <label for="checkbox-best-line" class="xy-option">line of best fit</label>
                     </div>
-                    <div>
+                    {{!-- <div>
                         <input type="checkbox" name="stats-checkbox" id="checkbox-hp-t" class="hp-option" value="t-test-for-hypothesis-test">
-                        <label for="checkbox-hp-t" class="hp-option-label">t-test for a hypothesis test</label>
+                        <label for="checkbox-hp-t" class="hp-option">t-test for a hypothesis test</label>
                     </div>
                     <div>
                         <input type="checkbox" name="stats-checkbox" id="checkbox-hp-v" class="hp-option" value="p-value-for-hypothesis-test">
-                        <label for="checkbox-hp-v" class="hp-option-label">p-value for a hypothesis test</label>
+                        <label for="checkbox-hp-v" class="hp-option">p-value for a hypothesis test</label>
                     </div>
                     <div>
                         <input type="checkbox" name="stats-checkbox" id="checkbox-hp-z" class="hp-option" value="z-test-for-hypothesis-test">
-                        <label for="checkbox-hp-z" class="hp-option-label">z-test for a hypothesis test</label>
-                    </div>
-                    <div>
+                        <label for="checkbox-hp-z" class="hp-option">z-test for a hypothesis test</label>
+                    </div> --}}
+                    {{!-- <div>
                         <input type="checkbox" name="stats-checkbox" id="checkbox-c-interval" class="hp-option" value="confidence-interval-hypothesis-test">
-                        <label for="checkbox-hp-z" class="hp-option-label">confidence interval for a hypothesis test</label>
-                    </div>
+                        <label for="checkbox-hp-z" class="hp-option">confidence interval for a hypothesis test</label>
+                    </div> --}}
                     <div>
-                        <input type="checkbox" name="stats-checkbox" id="checkbox-graph-v" class="graph-option" value="num-of-vectors">
-                        <label for="checkbox-graph-v" class="graph-option-label">number of vectors</label>
+                        <input type="checkbox" name="stats-checkbox" id="checkbox-graph-v" class="graph-option" value="num-of-vertices">
+                        <label for="checkbox-graph-v" class="graph-option">number of vertices</label>
                     </div>
                     <div>
                         <input type="checkbox" name="stats-checkbox" id="checkbox-graph-e" class="graph-option" value="num-of-edges">
-                        <label for="checkbox-graph-e" class="graph-option-label">number of edges</label>
+                        <label for="checkbox-graph-e" class="graph-option">number of edges</label>
                     </div>
                     <div>
                         <input type="checkbox" name="stats-checkbox" id="checkbox-graph-v-c" class="graph-option" value="vertex-connectivity">
-                        <label for="checkbox-graph-v-c" class="graph-option-label">vertex connectivity</label>
+                        <label for="checkbox-graph-v-c" class="graph-option">vertex connectivity</label>
                     </div>
                     <div>
                         <input type="checkbox" name="stats-checkbox" id="checkbox-graph-e-c" class="graph-option" value="edge-connectivity">
-                        <label for="checkbox-graph-e-c" class="graph-option-label">edge connectivity</label>
+                        <label for="checkbox-graph-e-c" class="graph-option">edge connectivity</label>
                     </div>
                     <div>
                         <input type="checkbox" name="stats-checkbox" id="checkbox-graph-d" class="graph-option" value="graph-density">
-                        <label for="checkbox-graph-d" class="graph-option-label">graph density</label>
+                        <label for="checkbox-graph-d" class="graph-option">graph density</label>
                     </div>
                 </fieldset>
             </div>

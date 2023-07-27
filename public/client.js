@@ -33,72 +33,63 @@ function drawChart() {
 
 var fileEntryList = []
 
-function hideElementsByClass(className) {
-    var targets = document.getElementsByClassName(className)
+function hideElementsByClass(classNames) {
+    for (var i = 0; i < classNames.length; i++) {
+        var targets = document.getElementsByClassName(classNames[i])
 
-    for (var i = 0; i < targets.length; i++) {
-        targets[i].classList.add("hidden")
+        for (var j = 0; j < targets.length; j++) {
+            targets[j].classList.add("hidden")
+        }
     }
 }
 
-function showElementsByClass(className) {
-    var targets = document.getElementsByClassName(className)
+function showElementsByClass(classNames) {
+    for (var i = 0; i < classNames.length; i++) {
+        var targets = document.getElementsByClassName(classNames[i])
 
-    for (var i = 0; i < targets.length; i++) {
-        targets[i].classList.remove("hidden")
+        for (var j = 0; j < targets.length; j++) {
+            targets[j].classList.remove("hidden")
+        }
     }
+
 }
 
 function filterStatistics(event) {
     var type = document.getElementById("statistics-filter").value
-    console.log(type)
 
-    if (type === "Hypothesis Testing") {
-        hideElementsByClass("xy-option")
-        hideElementsByClass("xy-option-label")
-        showElementsByClass("nd-option")
-        showElementsByClass("nd-option-label")
-        showElementsByClass("hp-option")
-        showElementsByClass("hp-option-label")
-        hideElementsByClass("graph-option")
-        hideElementsByClass("graph-option-label")
+    if (type === "Linear") {
+        hideElementsByClass([
+            "nd-option",
+            "graph-option"
+        ])
+        showElementsByClass(["xy-option"])
     }
     if (type === "Normal Distribution") {
-        hideElementsByClass("xy-option")
-        hideElementsByClass("xy-option-label")
-        showElementsByClass("nd-option")
-        showElementsByClass("nd-option-label")
-        hideElementsByClass("hp-option")
-        hideElementsByClass("hp-option-label")
-        hideElementsByClass("graph-option")
-        hideElementsByClass("graph-option-label")
+        hideElementsByClass([
+            "xy-option",
+            "graph-option"
+        ])
+        showElementsByClass(["nd-option"])
     }
     if (type === "All") {
-        showElementsByClass("xy-option")
-        showElementsByClass("xy-option-label")
-        showElementsByClass("nd-option")
-        showElementsByClass("nd-option-label")
-        showElementsByClass("hp-option")
-        showElementsByClass("hp-option-label")
-        showElementsByClass("graph-option")
-        showElementsByClass("graph-option-label")
+        showElementsByClass([
+            "xy-option",
+            "nd-option",
+            "graph-option"
+        ])
     }
     if (type === "Graph Measures") {
-        hideElementsByClass("xy-option")
-        hideElementsByClass("xy-option-label")
-        hideElementsByClass("nd-option")
-        hideElementsByClass("nd-option-label")
-        hideElementsByClass("hp-option")
-        hideElementsByClass("hp-option-label")
-        showElementsByClass("graph-option")
-        showElementsByClass("graph-option-label")
+        hideElementsByClass([
+            "xy-option",
+            "nd-option",
+        ])
+        showElementsByClass(["graph-option"])
     }
 }
 
 function checkFile(event) {
     // https://web.dev/read-files/
     const userFile = event.target.files[0];
-    console.log(userFile.type);
 
     if (userFile.type != "text/csv") {
         alert("Please provide a .csv or .xlsx file")
@@ -107,24 +98,45 @@ function checkFile(event) {
     }
 }
 
+function clearCheckboxesByClass(classNames) {
+    for (i = 0; i < classNames.length; i++) {
+        var checkboxes = document.getElementsByClassName(classNames[i])
+
+        for (j = 0; j < checkboxes.length; j++) {
+            checkboxes[j].checked = false
+        }
+    }
+}
+
 // https://www.geeksforgeeks.org/how-to-get-value-of-selected-radio-button-using-javascript/
 function setType(event) {
     var inputType = event.target.value
-    console.log(inputType)
 
-    var htOption = document.getElementById("select-option-ht")
     var ndOption = document.getElementById("select-option-nd")
     var graphOption = document.getElementById("select-option-graph")
+    var xyOption = document.getElementById("select-option-xy")
 
     if (inputType === "norm-dist") {
-        htOption.classList.remove("hidden")
         ndOption.classList.remove("hidden")
         graphOption.classList.add("hidden")
+        xyOption.classList.add("hidden")
+        hideElementsByClass(["xy-option", "graph-option"])
+        showElementsByClass(["nd-option"])
     } else if (inputType === "edge-list") {
-        htOption.classList.add("hidden")
         ndOption.classList.add("hidden")
         graphOption.classList.remove("hidden")
+        xyOption.classList.add("hidden")
+        hideElementsByClass(["nd-option", "xy-option"])
+        showElementsByClass(["graph-option"])
+    } else if (inputType === "xy-graph") {
+        ndOption.classList.add("hidden")
+        graphOption.classList.add("hidden")
+        xyOption.classList.remove("hidden")
+        hideElementsByClass(["nd-option", "graph-option"])
+        showElementsByClass(["xy-option"])
     }
+
+    clearCheckboxesByClass(["xy-option", "graph-option", "nd-option", "hp-option"])
 }
 
 function removeFileEntry(event) {
@@ -182,10 +194,8 @@ function getCheckbox() {
     console.log("in function getCheckbox")
 
     for (var i = 0; i < checkboxes.length; i++) {
-        console.log(i)
         if (checkboxes[i].checked) {
             checkedList.push(checkboxes[i].value)
-            console.log("checked")
         }
     }
     // console.log(checkedList)
@@ -202,20 +212,49 @@ function getRadioButton() {
     }
 }
 
+function requestMicroservice(outputJSON) {
+    const reqURL = "http://localhost:9000/"
+
+    fetch(reqURL, {
+        method: "POST",
+        mode: "cors",
+        body: outputJSON,
+        headers: {
+            "Content-Type": "application/json",
+        }
+    }).then(function(res) {
+        return res.json()
+    }).then(function(data) {
+        result = JSON.stringify({
+            fileName: body.name,
+            type: body.type,
+            stats: body.stats
+        })
+
+        // https://stackoverflow.com/questions/34156282/how-do-i-save-json-to-local-text-file
+        fs.writeFile(`${body.name}-result.json`, result, function(err) {
+            if (err) {
+                console.log("CLIENT: in writing to JSON: ")
+                console.log(err)
+            }
+        })
+    })
+}
+
+
+
 function handleApplyButton(event) {
     toggleResults(event)
     addNewFileEntry(event)
 
-    console.log(event.target.innerHTML)
-
     if (event.target.innerHTML === "Return") {
-        console.log("processing input")
-        var fileName = document.getElementById("file-input").files[0].name
+        var dataFile = document.getElementById("file-input").files[0]
         var chosenType = getRadioButton()
         var chosenStats = getCheckbox()
 
         var outputJSON = JSON.stringify({
-            file: fileName,
+            fileName: dataFile.name,
+            file: dataFile,
             type: chosenType,
             stats: chosenStats
         })
@@ -224,10 +263,6 @@ function handleApplyButton(event) {
 
         console.log(outputJSON)
     }
-
-    console.log("done processing input")
-
-
 }
 
 // Load the Visualization API and the corechart package.
