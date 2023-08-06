@@ -1,0 +1,13 @@
+<div class="child-panel" id="results-box-container">
+    <div id={{chart_id}}></div>
+    <div class="result-stats-container">
+
+        {{#each stat}}
+        <div class="result-entry-container">
+            <p>{{@key}}</p>
+            <p>{{this}}</p>
+        </div>
+        {{/each}}
+
+    </div>
+</div> <!-- results box -->

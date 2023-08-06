@@ -101,10 +101,19 @@ function setType(event) {
     clearCheckboxesByClass(["xy-option", "graph-option", "nd-option", "hp-option"])
 }
 
+function toggleResultPanel() {
+    var panel = document.getElementById("results-box-container")
+
+    if (panel) {
+        panel.classList.toggle("hidden")
+    }
+}
+
 function toggleResults(event) {
     document.getElementById("statistics-box-container").classList.toggle("hidden")
     document.getElementById("file-box-container").classList.toggle("hidden")
-    document.getElementById("results-box-container").classList.toggle("hidden")
+    // document.getElementById("results-box-container").classList.toggle("hidden")
+    toggleResultPanel()
     document.getElementById("customize-title").classList.toggle("hidden")
     document.getElementById("results-title").classList.toggle("hidden")
     if (document.getElementById("apply-button").innerHTML === "Return" ) {

@@ -2,8 +2,6 @@
 
 function drawChartFromArray(array) {
 
-    console.log(array[0][0])
-
     var data = new google.visualization.arrayToDataTable(array, false) // false indicates first row in the array are column labels.
 
     var options = {
@@ -42,8 +40,6 @@ function drawChartFromFile(file) {
         drawChartFromArray(tableContent)
     }
     reader.readAsText(file)
-
-    console.log(tableContent[1])
 
     // return tableContent
     // NOTE: access to tableContent elements outside of onload is impossible, however printing

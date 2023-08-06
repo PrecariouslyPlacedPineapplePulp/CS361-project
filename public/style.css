@@ -170,6 +170,20 @@ input#color-picker {
     display: none;
 }
 
+#results-box-container {
+    height: 70%;
+}
+
+.result-stats-container {
+    width: 90%;
+}
+
+.result-entry-container {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+}
+
 
 
 /* for the BUTTONS */

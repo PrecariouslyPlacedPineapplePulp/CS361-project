@@ -4,6 +4,8 @@ import { drawChartFromFile } from "./modules/process_charts";
 
 // NOTE FOR FUTURE: imports only work if main.handlebars has type="module" when it refers to this script.
 
+// Handlebars.registerPartial('resultPanelEntry')
+
 var fileEntryList = []
 
 function checkFile(event) {
@@ -71,12 +73,55 @@ function requestMicroservice(outputJSON) {
         })
 
         // https://stackoverflow.com/questions/34156282/how-do-i-save-json-to-local-text-file
-        fs.writeFile(`${body.name}-result.json`, result, function(err) {
-            if (err) {
-                console.log("CLIENT: in writing to JSON: ")
-                console.log(err)
-            }
-        })
+        // fs.writeFile(`${body.name}-result.json`, result, function(err) {
+        //     if (err) {
+        //         console.log("CLIENT: in writing to JSON: ")
+        //         console.log(err)
+        //     }
+        // }) NOT YET: only implement if there is enough time left.
+    })
+}
+
+function sampleOutput() {
+    return [
+        ['stdDev', 1],
+        ['var', 1],
+        ['mean', 1]
+    ]
+}
+
+
+function resultsPanel(outputStats) {
+
+    console.log(outputStats[0][0])
+    var statsDict = {}
+
+    // process the output stats to be compatible with template
+    for (var i = 0; i < outputStats.length; i++) {
+        statsDict[outputStats[i][0]] = outputStats[i][1]
+    }
+
+    console.log(statsDict)
+    
+    var resultAsHTML = Handlebars.templates.resultPanel({
+        chart_id: "chart_div",
+        stat: statsDict
+    })
+
+    const mainDiv = document.getElementsByClassName('main-panel')[0]
+    mainDiv.insertAdjacentHTML('beforeend', resultAsHTML)
+}
+
+function getInputsAsJSON() {
+    var dataFile = document.getElementById("file-input").files[0]
+    var chosenType = getRadioButton()
+    var chosenStats = getCheckbox()
+
+    return JSON.stringify({
+        fileName: dataFile.name,
+        file: dataFile,
+        type: chosenType,
+        stats: chosenStats
     })
 }
 
@@ -87,22 +132,15 @@ function handleApplyButton(event) {
     addNewFileEntry(event)
 
     if (event.target.innerHTML === "Return") {
-        var dataFile = document.getElementById("file-input").files[0]
-        var chosenType = getRadioButton()
-        var chosenStats = getCheckbox()
-
-        var outputJSON = JSON.stringify({
-            fileName: dataFile.name,
-            file: dataFile,
-            type: chosenType,
-            stats: chosenStats
-        })
-
-        // for (i = 0; i < array.length)
+        // inputs = getInputsAsJSON()
+        
+        var stats = sampleOutput()
+        console.log(stats[0])
+        resultsPanel(stats)
 
         var typeOfData = getRadioButton()
         if (typeOfData !== 'edge-list') {
-            drawChartFromFile(dataFile)
+            drawChartFromFile(document.getElementById("file-input").files[0])
         }
     }
 }
