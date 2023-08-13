@@ -54,7 +54,6 @@
                     <select id="statistics-filter" name="statistics-filter">
                         <option id="select-option-all">All</option>
                         <option id="select-option-nd">Normal Distribution</option>
-                        {{!-- <option id="select-option-ht">Hypothesis Testing</option> --}}
                         <option id="select-option-xy">Linear</option>
                         <option id="select-option-graph">Graph Measures</option>
                     </select>
@@ -68,7 +67,7 @@
                         <label for="checkbox-std-dev" class="nd-option">standard deviation</label>
                     </div>
                     <div>
-                        <input type="checkbox" name="stats-checkbox" id="checkbox-var" class="nd-option" value="variation">
+                        <input type="checkbox" name="stats-checkbox" id="checkbox-var" class="nd-option" value="var">
                         <label for="checkbox-var" class="nd-option">variation</label>
                     </div>
                     <div>
@@ -83,22 +82,6 @@
                         <input type="checkbox" name="stats-checkbox" id="checkbox-best-line" class="xy-option" value="line-best-fit">
                         <label for="checkbox-best-line" class="xy-option">line of best fit</label>
                     </div>
-                    {{!-- <div>
-                        <input type="checkbox" name="stats-checkbox" id="checkbox-hp-t" class="hp-option" value="t-test-for-hypothesis-test">
-                        <label for="checkbox-hp-t" class="hp-option">t-test for a hypothesis test</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="stats-checkbox" id="checkbox-hp-v" class="hp-option" value="p-value-for-hypothesis-test">
-                        <label for="checkbox-hp-v" class="hp-option">p-value for a hypothesis test</label>
-                    </div>
-                    <div>
-                        <input type="checkbox" name="stats-checkbox" id="checkbox-hp-z" class="hp-option" value="z-test-for-hypothesis-test">
-                        <label for="checkbox-hp-z" class="hp-option">z-test for a hypothesis test</label>
-                    </div> --}}
-                    {{!-- <div>
-                        <input type="checkbox" name="stats-checkbox" id="checkbox-c-interval" class="hp-option" value="confidence-interval-hypothesis-test">
-                        <label for="checkbox-hp-z" class="hp-option">confidence interval for a hypothesis test</label>
-                    </div> --}}
                     <div>
                         <input type="checkbox" name="stats-checkbox" id="checkbox-graph-v" class="graph-option" value="num-of-vertices">
                         <label for="checkbox-graph-v" class="graph-option">number of vertices</label>

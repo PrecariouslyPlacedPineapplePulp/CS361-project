@@ -101,19 +101,10 @@ function setType(event) {
     clearCheckboxesByClass(["xy-option", "graph-option", "nd-option", "hp-option"])
 }
 
-function toggleResultPanel() {
-    var panel = document.getElementById("results-box-container")
-
-    if (panel) {
-        panel.classList.toggle("hidden")
-    }
-}
-
-function toggleResults(event) {
+function toggleResults() {
     document.getElementById("statistics-box-container").classList.toggle("hidden")
     document.getElementById("file-box-container").classList.toggle("hidden")
     // document.getElementById("results-box-container").classList.toggle("hidden")
-    toggleResultPanel()
     document.getElementById("customize-title").classList.toggle("hidden")
     document.getElementById("results-title").classList.toggle("hidden")
     if (document.getElementById("apply-button").innerText === "Return" ) {
@@ -123,4 +114,40 @@ function toggleResults(event) {
     }
 }
 
-export { toggleResults, setType, filterStatistics }
+function hideResultPanels() {
+    var panels = document.getElementsByClassName('results-panel')
+
+    for (var i = 0; i < panels.length; i++) {
+        panels[i].classList.add('hidden')
+    }
+}
+
+function toggleResultForFile(event) {
+    if (!document.getElementById('file-box-container').classList.contains('hidden')) {
+        return
+    }
+
+    const entryText = event.target.innerText
+
+    var panels = document.getElementsByClassName('results-panel')
+
+    for (var i = 0; i < panels.length; i++) {
+        console.log('file:', panels[i].getAttribute('file'))
+        console.log('text:', entryText)
+        if (panels[i].getAttribute('file') === entryText) {
+            panels[i].classList.toggle('hidden')
+        }
+    }
+}
+
+function removeResultPanel(fileName) {
+    var panels = document.getElementsByClassName('results-panel')
+
+    for (var i = 0; i < panels.length; i++) {
+        if (panels[i].getAttribute('file') === fileName) {
+            panels[i].remove()
+        }
+    }
+}
+
+export { toggleResults, setType, filterStatistics, hideResultPanels, toggleResultForFile, removeResultPanel }

@@ -1,4 +1,4 @@
-import { toggleResults, setType, filterStatistics } from "./modules/ui_interactions";
+import { toggleResults, setType, filterStatistics, hideResultPanels, toggleResultForFile, removeResultPanel } from "./modules/ui_interactions";
 import { getCheckbox, getRadioButton } from "./modules/ui_inputs";
 import { drawChartFromFile, drawGraphFromFile } from "./modules/visualizer";
 
@@ -6,6 +6,7 @@ import { drawChartFromFile, drawGraphFromFile } from "./modules/visualizer";
 
 // Handlebars.registerPartial('resultPanelEntry')
 
+// this list keeps track of the names of files that the user has inputted and saved in the history panel
 var fileEntryList = []
 
 function checkFile(event) {
@@ -20,37 +21,67 @@ function checkFile(event) {
 }
 
 function removeFileEntry(event) {
+
+    // get the name stored in the entry's text element
     var entryDiv = event.target.parentElement
     const entryFileName = entryDiv.children[0].innerText
-    entryDiv.remove()
 
+    // remove that name from the entry list 
     const index = fileEntryList.indexOf(entryFileName)
     fileEntryList.splice(index, 1)
+
+    // delete associated elements
+    removeResultPanel(entryFileName)
+    entryDiv.remove()
 }
 
 // https://observablehq.com/@danyx/lists-of-items-with-add-delete-buttons#
-function addNewFileEntry(event) {
+function addNewFileEntry(entryName) {
     var index = fileEntryList.length
-    var newFileName = document.getElementById("file-input").files[0].name
-    if (!(fileEntryList.includes(newFileName))) {
-        fileEntryList.push(newFileName)
 
-        var entryText = document.createElement("p")
-        entryText.innerText = fileEntryList[index]
+    fileEntryList.push(entryName)
+
+    // generate label text for the entry
+    var entryText = document.createElement("p")
+    entryText.innerText = fileEntryList[index]
+    entryText.addEventListener("click", toggleResultForFile)
     
-        fileEntryList.push
+    // generate trash button for the entry
+    var removeButton = document.createElement("a")
+    removeButton.innerText = "🗑"
+    removeButton.addEventListener("click", removeFileEntry)
+
+    // put elements in a div
+    var entryDiv = document.createElement("div")
+    entryDiv.classList.add("history-entry-container")
+    entryDiv.appendChild(entryText)
+    entryDiv.appendChild(removeButton)
     
-        var removeButton = document.createElement("a")
-        // removeButton.setAttribute("href", "#")
-        removeButton.innerText = "🗑"
-        removeButton.addEventListener("click", removeFileEntry)
-        var entryDiv = document.createElement("div")
-        entryDiv.classList.add("history-entry-container")
-        entryDiv.appendChild(entryText)
-        entryDiv.appendChild(removeButton)
-    
-        document.getElementById("history-panel-contents").appendChild(entryDiv)  
+    // append div to the history panel's content div
+    document.getElementById("history-panel-contents").appendChild(entryDiv)
+}
+
+
+async function handleServiceResponse(data, dataFile) {
+    // create unique name for file entry
+    var entryName = dataFile.name
+    if (fileEntryList.includes(entryName)) {
+        // if a duplicate exists, append ' copy0' to the file name
+        entryName = entryName.concat('(copy1)')
+        var i = 2
+        // if a duplicate still exists, replace ' copy0' with ' copy' + i, incrementing i until unique name is found
+        while (fileEntryList.includes(entryName)) {
+            entryName = entryName.slice(0, -2) + i + ')'
+            i++
+        }
     }
+
+    console.log(data.stats)
+    // call function to generate the results panel
+    generateResultsPanel(data.stats, entryName)
+
+    // this function adds a new entry to the history panel
+    addNewFileEntry(entryName)
 }
 
 function callMicroservice(inputType, inputStats) {
@@ -77,20 +108,7 @@ function callMicroservice(inputType, inputStats) {
         return res.json()
     }).then(function(data) {
 
-        // use handlebars template to generate the results panel
-        resultsPanel(data.stats)
-
-        // call appropriate function for drawing either a graph or a chart, depending on tyoeOfData
-        var typeOfData = getRadioButton()
-        if (typeOfData !== 'edge-list') {
-            drawChartFromFile(document.getElementById("file-input").files[0])
-        } else {
-            drawGraphFromFile(document.getElementById("file-input").files[0])
-        }
-
-        // remove ids of visualization elements after js finishes drawing the graph or chart
-        document.getElementById('chart-div').removeAttribute('id')
-        document.getElementById('graph').removeAttribute('id')
+        handleServiceResponse(data, dataFile)
         
     }).catch(function(err) {
         console.log(err)
@@ -98,7 +116,7 @@ function callMicroservice(inputType, inputStats) {
 }
 
 
-function resultsPanel(outputStats) {
+function generateResultsPanel(outputStats, fileName) {
     var statsDict = {}
 
     // process the output stats to be compatible with template
@@ -108,31 +126,39 @@ function resultsPanel(outputStats) {
     
     // generate HTML from handlebars template
     var resultAsHTML = Handlebars.templates.resultPanel({
+        fname: fileName,
         stat: statsDict
     })
 
     // insert the HTML into the main div
     const mainDiv = document.getElementsByClassName('main-panel')[0]
     mainDiv.insertAdjacentHTML('beforeend', resultAsHTML)
+
+    // call appropriate function for drawing either a graph or a chart, depending on tyoeOfData
+    var typeOfData = getRadioButton()
+    if (typeOfData !== 'edge-list') {
+        drawChartFromFile(document.getElementById("file-input").files[0])
+    } else {
+        drawGraphFromFile(document.getElementById("file-input").files[0])
+    }
 }
 
 function handleApplyButton(event) {
 
     // this function hides the input panels and changes the title and button text
-    toggleResults(event)
-
-    // this function adds a new entry to the history panel
-    addNewFileEntry(event)
+    toggleResults()
 
     // calls microservice if user is going to the results page.
     if (event.target.innerHTML === "Return") {  // change "Return" to "Apply" if this if-statement is moved before toggleResults(event)
         callMicroservice(getRadioButton(), getCheckbox())
+    } else {
+        hideResultPanels()
     }
 }
 
 // after loading in google charts, add event listener to the Apply/Return button
 google.charts.load('current', {'packages':['corechart']}).then(function () {
-    document.getElementById('apply-button').onclick = handleApplyButton
+    document.getElementById('apply-button').addEventListener('click', handleApplyButton)
 })
 
 // add event listeners to other elements

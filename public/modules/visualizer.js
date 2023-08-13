@@ -1,4 +1,10 @@
 
+function removeIdentifiers() {
+    // remove ids of visualization elements after js finishes drawing the graph or chart
+    document.getElementById('chart-div').removeAttribute('id')
+    document.getElementById('graph').removeAttribute('id')
+}
+
 
 function drawChartFromArray(array) {
 
@@ -10,8 +16,10 @@ function drawChartFromArray(array) {
         'max-height': 300,
     }
 
-    var chart = new google.visualization.BarChart(document.getElementById('chart_div'))
+    var chart = new google.visualization.BarChart(document.getElementById('chart-div'))
     chart.draw(data, options)
+
+    removeIdentifiers()
 }
 
 
@@ -99,6 +107,8 @@ function drawGraphFromObject(dataObj) {
             .attr("cx", function (d) { return d.x+6; })
             .attr("cy", function(d) { return d.y-6; });
     }
+
+    removeIdentifiers()
 
 }
 

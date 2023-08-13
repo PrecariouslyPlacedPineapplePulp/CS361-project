@@ -9,7 +9,7 @@
 // Returns the user's selection for the checkboxes inside the stats panel.
 // Possible return options include: 
 //      'std-dev',
-//      'variation',
+//      'var',
 //      'mean',
 //      'median,
 //      'line-best-fit,
@@ -21,8 +21,6 @@
 function getCheckbox() {
     var checkboxes = document.getElementsByName("stats-checkbox")
     var checkedList = []
-
-    console.log("in function getCheckbox")
 
     for (var i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked) {
