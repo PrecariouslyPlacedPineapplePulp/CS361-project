@@ -116,10 +116,10 @@ function toggleResults(event) {
     toggleResultPanel()
     document.getElementById("customize-title").classList.toggle("hidden")
     document.getElementById("results-title").classList.toggle("hidden")
-    if (document.getElementById("apply-button").innerHTML === "Return" ) {
-        document.getElementById("apply-button").innerHTML = "Apply" 
+    if (document.getElementById("apply-button").innerText === "Return" ) {
+        document.getElementById("apply-button").innerText = "Apply" 
     } else {
-        document.getElementById("apply-button").innerHTML = "Return" 
+        document.getElementById("apply-button").innerText = "Return" 
     }
 }
 

@@ -1,6 +1,6 @@
 import { toggleResults, setType, filterStatistics } from "./modules/ui_interactions";
 import { getCheckbox, getRadioButton } from "./modules/ui_inputs";
-import { drawChartFromFile } from "./modules/process_charts";
+import { drawChartFromFile, drawGraphFromFile } from "./modules/visualizer";
 
 // NOTE FOR FUTURE: imports only work if main.handlebars has type="module" when it refers to this script.
 
@@ -53,105 +53,90 @@ function addNewFileEntry(event) {
     }
 }
 
-function requestMicroservice(outputJSON) {
-    const reqURL = "http://localhost:9000/"
+function callMicroservice(inputType, inputStats) {
+    const reqURL= "http://localhost:5000/"
 
+    var dataFile = document.getElementById('file-input').files[0]
+
+    // fetch() sends HTTP request to reqURL
     fetch(reqURL, {
+
+        // these are the contents of the HTTP request, in accordance with the communication contract
         method: "POST",
         mode: "cors",
-        body: outputJSON,
+        body: JSON.stringify({
+            file: dataFile.name,
+            type: inputType,
+            stats: inputStats
+        }),
         headers: {
-            "Content-Type": "application/json",
+            "Content-Type" : "application/json"
         }
+
     }).then(function(res) {
         return res.json()
     }).then(function(data) {
-        result = JSON.stringify({
-            fileName: body.name,
-            type: body.type,
-            stats: body.stats
-        })
 
-        // https://stackoverflow.com/questions/34156282/how-do-i-save-json-to-local-text-file
-        // fs.writeFile(`${body.name}-result.json`, result, function(err) {
-        //     if (err) {
-        //         console.log("CLIENT: in writing to JSON: ")
-        //         console.log(err)
-        //     }
-        // }) NOT YET: only implement if there is enough time left.
+        // use handlebars template to generate the results panel
+        resultsPanel(data.stats)
+
+        // call appropriate function for drawing either a graph or a chart, depending on tyoeOfData
+        var typeOfData = getRadioButton()
+        if (typeOfData !== 'edge-list') {
+            drawChartFromFile(document.getElementById("file-input").files[0])
+        } else {
+            drawGraphFromFile(document.getElementById("file-input").files[0])
+        }
+
+        // remove ids of visualization elements after js finishes drawing the graph or chart
+        document.getElementById('chart-div').removeAttribute('id')
+        document.getElementById('graph').removeAttribute('id')
+        
+    }).catch(function(err) {
+        console.log(err)
     })
-}
-
-function sampleOutput() {
-    return [
-        ['stdDev', 1],
-        ['var', 1],
-        ['mean', 1]
-    ]
 }
 
 
 function resultsPanel(outputStats) {
-
-    console.log(outputStats[0][0])
     var statsDict = {}
 
     // process the output stats to be compatible with template
     for (var i = 0; i < outputStats.length; i++) {
         statsDict[outputStats[i][0]] = outputStats[i][1]
     }
-
-    console.log(statsDict)
     
+    // generate HTML from handlebars template
     var resultAsHTML = Handlebars.templates.resultPanel({
-        chart_id: "chart_div",
         stat: statsDict
     })
 
+    // insert the HTML into the main div
     const mainDiv = document.getElementsByClassName('main-panel')[0]
     mainDiv.insertAdjacentHTML('beforeend', resultAsHTML)
 }
 
-function getInputsAsJSON() {
-    var dataFile = document.getElementById("file-input").files[0]
-    var chosenType = getRadioButton()
-    var chosenStats = getCheckbox()
-
-    return JSON.stringify({
-        fileName: dataFile.name,
-        file: dataFile,
-        type: chosenType,
-        stats: chosenStats
-    })
-}
-
-
-
 function handleApplyButton(event) {
+
+    // this function hides the input panels and changes the title and button text
     toggleResults(event)
+
+    // this function adds a new entry to the history panel
     addNewFileEntry(event)
 
-    if (event.target.innerHTML === "Return") {
-        // inputs = getInputsAsJSON()
-        
-        var stats = sampleOutput()
-        console.log(stats[0])
-        resultsPanel(stats)
-
-        var typeOfData = getRadioButton()
-        if (typeOfData !== 'edge-list') {
-            drawChartFromFile(document.getElementById("file-input").files[0])
-        }
+    // calls microservice if user is going to the results page.
+    if (event.target.innerHTML === "Return") {  // change "Return" to "Apply" if this if-statement is moved before toggleResults(event)
+        callMicroservice(getRadioButton(), getCheckbox())
     }
 }
 
+// after loading in google charts, add event listener to the Apply/Return button
 google.charts.load('current', {'packages':['corechart']}).then(function () {
     document.getElementById('apply-button').onclick = handleApplyButton
 })
 
+// add event listeners to other elements
 document.getElementById("statistics-filter").addEventListener("input", filterStatistics)
-// document.getElementById("apply-button").addEventListener("click", handleApplyButton)
-// document.getElementById("file-input").addEventListener("input", checkFile)
 document.getElementById("file-input").addEventListener("change", checkFile)
 // https://flaviocopes.com/how-to-add-event-listener-multiple-elements-javascript/
 document.getElementsByName("type-picker").forEach(elem => {

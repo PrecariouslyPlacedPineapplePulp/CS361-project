@@ -27,8 +27,8 @@ app.get('/modules/ui_inputs', function(req, res, next) {
     res.status(200).sendFile(__dirname + '\\public\\modules\\ui_inputs.js')
 })
 
-app.get('/modules/process_charts', function(req, res, next) {
-    res.status(200).sendFile(__dirname + '\\public\\modules\\process_charts.js')
+app.get('/modules/visualizer', function(req, res, next) {
+    res.status(200).sendFile(__dirname + '\\public\\modules\\visualizer.js')
 })
 
 // app.post('/new', function (req, res, next) {

@@ -171,17 +171,22 @@ input#color-picker {
 }
 
 #results-box-container {
-    height: 70%;
+    height: auto;
 }
 
 .result-stats-container {
-    width: 90%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .result-entry-container {
     width: 90%;
     display: flex;
     justify-content: space-between;
+    border-top: 1px solid var(--text-color-on-white)
+
 }
 
 
