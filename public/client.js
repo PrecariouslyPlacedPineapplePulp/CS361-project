@@ -47,7 +47,7 @@ function removeFileEntry(event) {
 function _entryText() {
     var index = fileEntryList.length
     var entryText = document.createElement("p")
-    entryText.innerText = fileEntryList[index]
+    entryText.innerText = fileEntryList[index - 1]
     entryText.addEventListener("click", toggleResultForFile)
     return entryText
 }
