@@ -2,13 +2,13 @@ import { toggleResults, setType, filterStatistics, hideResultPanels, toggleResul
 import { getCheckbox, getRadioButton } from "./modules/ui_inputs";
 import { drawChartFromFile, drawGraphFromFile } from "./modules/visualizer";
 
-// NOTE FOR FUTURE: imports only work if main.handlebars has type="module" when it refers to this script.
-
-// Handlebars.registerPartial('resultPanelEntry')
-
 // this list keeps track of the names of files that the user has inputted and saved in the history panel
 var fileEntryList = []
 
+
+// FUNCTION DESCRIPTION: 
+// checks if the file that the user inputted is a csv.
+// If not, clears the input and notifies the user with a pop-up.
 function checkFile(event) {
     // https://web.dev/read-files/
     const userFile = event.target.files[0];
@@ -20,6 +20,10 @@ function checkFile(event) {
     }
 }
 
+
+// FUNCTION DESCRIPTION:
+// callback for when the user clicks on trash buttons in the history panel.
+// Removes the history entry and its associated result panel.
 function removeFileEntry(event) {
 
     // get the name stored in the entry's text element
@@ -35,95 +39,128 @@ function removeFileEntry(event) {
     entryDiv.remove()
 }
 
-// https://observablehq.com/@danyx/lists-of-items-with-add-delete-buttons#
-function addNewFileEntry(entryName) {
+
+// FUNCTION DESCRIPTION:
+// a helper function used in addNewFileEntry that
+// generates label text for a new file entry
+// in the history panel.
+function _entryText() {
     var index = fileEntryList.length
-
-    fileEntryList.push(entryName)
-
-    // generate label text for the entry
     var entryText = document.createElement("p")
     entryText.innerText = fileEntryList[index]
     entryText.addEventListener("click", toggleResultForFile)
-    
-    // generate trash button for the entry
+    return entryText
+}
+
+
+// FUNCTION DESCRIPTION:
+// a helper function used in addNewFileEntry that
+// returns an HTML element for a new trash button
+function _removeButton() {
     var removeButton = document.createElement("a")
     removeButton.innerText = "🗑"
     removeButton.addEventListener("click", removeFileEntry)
+    return removeButton
+}
 
+
+// FUNCTION DESCRIPTION:
+// a helper function used in addNewFileEntry that
+// returns an HTML element for the outer div of a new history
+// panel entry
+function _historyEntryContainer(entryText, removeButton) {
     // put elements in a div
     var entryDiv = document.createElement("div")
     entryDiv.classList.add("history-entry-container")
     entryDiv.appendChild(entryText)
     entryDiv.appendChild(removeButton)
-    
-    // append div to the history panel's content div
+    return entryDiv
+}
+
+
+// FUNCTION DESCRIPTION:
+// takes a string as a paramter and adds an entry to the history panel
+// with the string as its label.
+// REFERENCES:
+// https://observablehq.com/@danyx/lists-of-items-with-add-delete-buttons#
+function addNewFileEntry(entryName) {
+    fileEntryList.push(entryName)
+    var entryText = _entryText()
+    var removeButton = _removeButton()
+    var entryDiv = _historyEntryContainer(entryText, removeButton)
     document.getElementById("history-panel-contents").appendChild(entryDiv)
 }
 
 
-async function handleServiceResponse(data, dataFile) {
-    // create unique name for file entry
-    var entryName = dataFile.name
-    if (fileEntryList.includes(entryName)) {
+// FUNCTION DESCRIPTION:
+// if fileName already exists, adds '(copy#)' to the name to make it unique,
+// where # is an int indicating that the current name is the #th copy.
+function generateFileEntryName(fileName) {
+    if (fileEntryList.includes(fileName)) {
         // if a duplicate exists, append ' copy0' to the file name
-        entryName = entryName.concat('(copy1)')
+        fileName = fileName.concat('(copy1)')
         var i = 2
         // if a duplicate still exists, replace ' copy0' with ' copy' + i, incrementing i until unique name is found
-        while (fileEntryList.includes(entryName)) {
-            entryName = entryName.slice(0, -2) + i + ')'
+        while (fileEntryList.includes(fileName)) {
+            fileName = fileName.slice(0, -2) + i + ')'
             i++
         }
     }
+    return fileName
+}
 
-    console.log(data.stats)
-    // call function to generate the results panel
+
+// FUNCTION DESCRIPTION:
+// Takes the response of the microservice and the user's inputted file,
+// and calls other functions to process the data.
+function handleServiceResponse(data, dataFile) {
+    const entryName = generateFileEntryName(dataFile.name)
     generateResultsPanel(data.stats, entryName)
-
-    // this function adds a new entry to the history panel
     addNewFileEntry(entryName)
 }
 
+// FUNCTION DESCRIPTION:
+// sends an HTTP request to the microservice and gets the response back
 function callMicroservice(inputType, inputStats) {
-    const reqURL= "http://localhost:5000/"
-
     var dataFile = document.getElementById('file-input').files[0]
 
-    // fetch() sends HTTP request to reqURL
-    fetch(reqURL, {
-
-        // these are the contents of the HTTP request, in accordance with the communication contract
+    fetch("http://localhost:5000/", {
         method: "POST",
         mode: "cors",
         body: JSON.stringify({
-            file: dataFile.name,
-            type: inputType,
-            stats: inputStats
+            file: dataFile.name,    // this is the file name
+            type: inputType,        // this is either 'norm-dist', 'edge-list', or 'xy-graph'
+            stats: inputStats       // these are the stats and measures the user has requested
         }),
         headers: {
             "Content-Type" : "application/json"
         }
-
     }).then(function(res) {
         return res.json()
     }).then(function(data) {
-
         handleServiceResponse(data, dataFile)
-        
     }).catch(function(err) {
         console.log(err)
     })
 }
 
-
-function generateResultsPanel(outputStats, fileName) {
-    var statsDict = {}
-
-    // process the output stats to be compatible with template
-    for (var i = 0; i < outputStats.length; i++) {
-        statsDict[outputStats[i][0]] = outputStats[i][1]
+// FUNCTION DESCRIPTION:
+// calls a function from visualizer.js to draw a chart or a graph depending
+// on what kind of data the user inputted.
+function callVisualizer() {
+    var typeOfData = getRadioButton()
+    if (typeOfData !== 'edge-list') {
+        drawChartFromFile(document.getElementById("file-input").files[0])
+    } else {
+        drawGraphFromFile(document.getElementById("file-input").files[0])
     }
-    
+}
+
+
+// FUNCTION DESCRIPTION:
+// helper function for generateResultsPanel that generates the HTML
+// for a result panel and inserts it into the main div
+function _resultPanel(fileName, statsDict) {
     // generate HTML from handlebars template
     var resultAsHTML = Handlebars.templates.resultPanel({
         fname: fileName,
@@ -133,16 +170,28 @@ function generateResultsPanel(outputStats, fileName) {
     // insert the HTML into the main div
     const mainDiv = document.getElementsByClassName('main-panel')[0]
     mainDiv.insertAdjacentHTML('beforeend', resultAsHTML)
-
-    // call appropriate function for drawing either a graph or a chart, depending on tyoeOfData
-    var typeOfData = getRadioButton()
-    if (typeOfData !== 'edge-list') {
-        drawChartFromFile(document.getElementById("file-input").files[0])
-    } else {
-        drawGraphFromFile(document.getElementById("file-input").files[0])
-    }
 }
 
+
+// FUNCTION DESCRIPTION:
+// adds a result panel to the main div and populates it with a visualization
+// (graph or chart) and summary stats of the user's data.
+function generateResultsPanel(outputStats, fileName) {
+    var statsDict = {}
+
+    // process the output stats to be compatible with template
+    for (var i = 0; i < outputStats.length; i++) {
+        statsDict[outputStats[i][0]] = outputStats[i][1]
+    }
+    
+    _resultPanel(fileName, statsDict)
+    callVisualizer()
+}
+
+
+// FUNCTION DESCRIPTION:
+// depending on the state of the big special button, either
+// calls the microservice or goes back to the customization page.
 function handleApplyButton(event) {
 
     // this function hides the input panels and changes the title and button text
@@ -164,7 +213,6 @@ google.charts.load('current', {'packages':['corechart']}).then(function () {
 // add event listeners to other elements
 document.getElementById("statistics-filter").addEventListener("input", filterStatistics)
 document.getElementById("file-input").addEventListener("change", checkFile)
-// https://flaviocopes.com/how-to-add-event-listener-multiple-elements-javascript/
 document.getElementsByName("type-picker").forEach(elem => {
     elem.addEventListener("click", setType)
 })

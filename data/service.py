@@ -70,13 +70,13 @@ def handle_response():
             output.append(['numOfEdges', graph.number_of_edges()])
 
         if 'vertex-connectivity' in message['stats']:
-            output.append(['vertex-connectivity', graph.vertex_connectivity()])
+            output.append(['vertex-connectivity', nx.node_connectivity(graph)])
         
         if 'edge-connectivity' in message['stats']:
-            output.append(['edge-connectivity', graph.edge_connectivity()])
+            output.append(['edge-connectivity', nx.edge_connectivity(graph)])
 
         if 'graph-density' in message['stats']:
-            output.append(['graph-density', graph.graph_density()])
+            output.append(['graph-density', nx.density(graph)])
 
     # return output
     return {"stats" : output}
